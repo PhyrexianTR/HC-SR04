@@ -30,7 +30,7 @@ try:
         for angle in angles:
             distance = measure_distance()
             distances.append(distance)
-            time.sleep(0.05)  # Small delay between measurements
+            time.sleep(0.02)  # Small delay between measurements
 
         # Smooth the data using interpolation
         angle_smooth = np.linspace(0, np.pi, 600)
