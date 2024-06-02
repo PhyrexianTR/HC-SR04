@@ -21,26 +21,11 @@ def measure_distance():
     GPIO.output(TRIG, False)
 
     # Echo pininden gelen sinyali ölçme
-    start_time = time.time()
-    stop_time = time.time()
-
-    timeout = start_time + 0.04  # 40 ms timeout
-
-    while GPIO.input(ECHO) == 0 and time.time() < timeout:
+    while GPIO.input(ECHO) == 0:
         start_time = time.time()
 
-    if time.time() >= timeout:
-        print("Timeout waiting for start signal")
-        return None
-
-    timeout = time.time() + 0.04  # 40 ms timeout
-
-    while GPIO.input(ECHO) == 1 and time.time() < timeout:
+    while GPIO.input(ECHO) == 1:
         stop_time = time.time()
-
-    if time.time() >= timeout:
-        print("Timeout waiting for end signal")
-        return None
 
     # Zaman farkını ve mesafeyi hesaplama
     time_elapsed = stop_time - start_time
@@ -51,7 +36,7 @@ def measure_distance():
 try:
     while True:
         dist = measure_distance()
-        if dist is not None:
+        if dist:
             print(f"Distance: {dist:.2f} cm")
         else:
             print("No valid distance measured.")
