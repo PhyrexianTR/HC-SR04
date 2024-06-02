@@ -13,7 +13,7 @@ sensor = DistanceSensor(trigger=18, echo=24)
 
 # Set up the plot
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='polar')
+ax = fig.add_subplot(111, polar=True)
 ax.set_ylim(0, 200)  # Set the radius limit to 200 cm
 
 # Function to measure distance
@@ -29,7 +29,7 @@ try:
         for angle in angles:
             distance = measure_distance()
             distances.append(distance)
-            time.sleep(0.1)  # Small delay between measurements
+            time.sleep(0.05)  # Small delay between measurements
             
         # Clear the plot
         ax.clear()
