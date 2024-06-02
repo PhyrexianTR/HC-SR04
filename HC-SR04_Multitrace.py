@@ -3,6 +3,7 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 from gpiozero import DistanceSensor
+from scipy.interpolate import make_interp_spline
 
 # GPIO setup
 GPIO.setmode(GPIO.BCM)
@@ -30,14 +31,20 @@ try:
             distance = measure_distance()
             distances.append(distance)
             time.sleep(0.05)  # Small delay between measurements
-            
+
+        # Smooth the data using interpolation
+        angle_smooth = np.linspace(0, np.pi, 600)
+        spline = make_interp_spline(angles, distances, k=3)
+        distance_smooth = spline(angle_smooth)
+        
         # Clear the plot
         ax.clear()
         
         # Plot the data
-        ax.plot(angles, distances, 'ro-')
+        ax.plot(angle_smooth, distance_smooth, 'r-')
+        ax.fill(angle_smooth, distance_smooth, color='r', alpha=0.3)
         ax.set_ylim(0, 200)  # Set the radius limit to 200 cm
-        ax.set_title('3D Distance Measurement Visualization')
+        ax.set_title('Radar-like 3D Distance Measurement Visualization')
         
         # Draw the plot
         plt.draw()
