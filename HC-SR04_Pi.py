@@ -26,7 +26,7 @@ def measure_distance():
     # Echo pininden gelen sinyali ölçme
     start_time = time.time()
     stop_time = time.time()
-    
+
     timeout = start_time + 0.05  # 50 ms timeout
 
     while GPIO.input(ECHO) == 0 and time.time() < timeout:
