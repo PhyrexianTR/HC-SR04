@@ -1,18 +1,22 @@
+# Getting the libraries we need
 from gpiozero import DistanceSensor
 from time import sleep
 
 # Initialize ultrasonic sensor
-sensor = DistanceSensor(trigger=23, echo=24)
+sensor = DistanceSensor(trigger=18, echo=24)
 
 while True:
-    # Wait 2 seconds
-    sleep(2)
+	# Wait 2 seconds
+	sleep(2)
+	
+	# Get the distance in metres
+	distance = sensor.distance
 
-    # Get the distance in metres
-    distance = sensor.distance
+	# But we want it in centimetres
+	distance = sensor.distance * 100
 
-    # Convert to centimeters and round to 2 decimal places
-    distance_cm = round(distance * 100, 2)
+	# We would get a large decimal number so we will round it to 2 places
+	distance = round(sensor.distance, 2)
 
-    # Print the information to the screen
-    print("Distance: {} cm".format(distance_cm))
+	# Print the information to the screen
+	print("Distance: {} cm".format(sensor.distance))
