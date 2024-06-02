@@ -19,6 +19,9 @@ def measure_distance():
     time.sleep(0.00001)
     GPIO.output(TRIG, False)
 
+    start_signal_received = False
+    end_signal_received = False
+
     # Echo pininden gelen sinyali ölç
     while GPIO.input(ECHO) == 0:
         pulse_start = time.time()
