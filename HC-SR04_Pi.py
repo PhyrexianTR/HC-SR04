@@ -24,11 +24,23 @@ def measure_distance():
     start_time = time.time()
     stop_time = time.time()
 
-    while GPIO.input(ECHO) == 0:
+    timeout = start_time + 0.04  # 40 ms timeout
+
+    while GPIO.input(ECHO) == 0 and time.time() < timeout:
         start_time = time.time()
 
-    while GPIO.input(ECHO) == 1:
+    if time.time() >= timeout:
+        print("Timeout waiting for start signal")
+        return None
+
+    timeout = time.time() + 0.04  # 40 ms timeout
+
+    while GPIO.input(ECHO) == 1 and time.time() < timeout:
         stop_time = time.time()
+
+    if time.time() >= timeout:
+        print("Timeout waiting for end signal")
+        return None
 
     # Zaman farkını ve mesafeyi hesaplama
     time_elapsed = stop_time - start_time
@@ -39,7 +51,10 @@ def measure_distance():
 try:
     while True:
         dist = measure_distance()
-        print(f"Distance: {dist:.2f} cm")
+        if dist is not None:
+            print(f"Distance: {dist:.2f} cm")
+        else:
+            print("No valid distance measured.")
         time.sleep(1)
 
 except KeyboardInterrupt:
