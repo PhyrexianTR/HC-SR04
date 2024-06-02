@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
-# GPIO ayarları
+# GPIO pin ayarları
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -17,34 +17,37 @@ def measure_distance():
     # Trig pinini düşük yaparak başlat
     GPIO.output(TRIG, False)
     time.sleep(2)
-
+    
     # Trig pinini yüksek yap ve kısa bir süre sonra tekrar düşük yap
     GPIO.output(TRIG, True)
     time.sleep(0.00001)
     GPIO.output(TRIG, False)
 
+    # Echo pininden gelen sinyali ölçme
     start_time = time.time()
+    stop_time = time.time()
+    
     timeout = start_time + 0.05  # 50 ms timeout
 
     while GPIO.input(ECHO) == 0 and time.time() < timeout:
-        pulse_start = time.time()
+        start_time = time.time()
 
     if time.time() >= timeout:
         print("Echo pin did not receive the start signal.")
         return None
 
-    stop_time = time.time()
-    timeout = stop_time + 0.05  # 50 ms timeout
+    timeout = time.time() + 0.05  # 50 ms timeout
 
     while GPIO.input(ECHO) == 1 and time.time() < timeout:
-        pulse_end = time.time()
+        stop_time = time.time()
 
     if time.time() >= timeout:
         print("Echo pin did not receive the end signal.")
         return None
 
-    pulse_duration = pulse_end - pulse_start
-    distance = pulse_duration * 17150
+    # Zaman farkını ve mesafeyi hesaplama
+    time_elapsed = stop_time - start_time
+    distance = (time_elapsed * 34300) / 2
     distance = round(distance, 2)
 
     return distance
