@@ -36,6 +36,7 @@ try:
         ax.clear()
         
         # Plot the data
+        ax.plot(x_data, y_data, z_data, label='Distance')
         ax.scatter(x_data, y_data, z_data, c='r', marker='o')
         ax.set_xlabel('X Label')
         ax.set_ylabel('Y Label')
